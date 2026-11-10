@@ -4,6 +4,7 @@ import { SINGLE_ORIGIN_LOTS } from '../data/roasteryData';
 import { SingleOriginLot, BagWeight, GrindOption } from '../types/coffee';
 import { Check, ShoppingBag, Repeat } from 'lucide-react';
 import { SavingsCalculator } from './SavingsCalculator';
+import { ResponsiveImage } from './ResponsiveImage';
 
 export const BeanMiniStoreAndCalculator: React.FC = () => {
   const { t, addToCart, formatMoney } = useRoastery();
@@ -24,6 +25,20 @@ export const BeanMiniStoreAndCalculator: React.FC = () => {
     if (activeFilter === 'decaf') return lot.roastLevel === 'swiss_water_decaf';
     return true;
   });
+
+  const handleFilterChange = (filter: 'all' | 'filter' | 'omni' | 'decaf') => {
+    setActiveFilter(filter);
+    const matching = SINGLE_ORIGIN_LOTS.filter((lot) => {
+      if (filter === 'all') return true;
+      if (filter === 'filter') return lot.roastLevel === 'light_filter';
+      if (filter === 'omni') return lot.roastLevel === 'medium_omni' || lot.roastLevel === 'medium_dark';
+      if (filter === 'decaf') return lot.roastLevel === 'swiss_water_decaf';
+      return true;
+    });
+    if (matching.length > 0 && !matching.some((l) => l.id === selectedLot.id)) {
+      setSelectedLot(matching[0]);
+    }
+  };
 
   // Calculate price for selected lot & config
   const calculateConfiguredPrice = (): number => {
@@ -67,7 +82,7 @@ export const BeanMiniStoreAndCalculator: React.FC = () => {
           <p className="text-xs uppercase tracking-widest font-bold text-terracotta mb-2">
             {t.store.kicker}
           </p>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-espressoDeep tracking-tight">
+          <h2 className="font-serif fluid-heading-section font-bold text-espressoDeep tracking-tight">
             {t.store.title}
           </h2>
           <p className="mt-4 text-base text-textLightMuted leading-relaxed">
@@ -85,10 +100,10 @@ export const BeanMiniStoreAndCalculator: React.FC = () => {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveFilter(tab.id as any)}
+              onClick={() => handleFilterChange(tab.id as any)}
               className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
                 activeFilter === tab.id
-                  ? 'bg-espressoDeep text-stoneIvory shadow-sm'
+                  ? 'bg-espressoDeep text-stoneIvory shadow-sm font-bold'
                   : 'bg-oatSurface/70 text-espressoDeep hover:bg-oatSurface'
               }`}
             >
@@ -121,10 +136,11 @@ export const BeanMiniStoreAndCalculator: React.FC = () => {
                           : 'bg-stoneIvory/60 border-espressoDeep/10 hover:border-espressoDeep/30'
                       }`}
                     >
-                      <img
+                      <ResponsiveImage
                         src={lot.image}
                         alt={lot.name}
-                        className="w-11 h-11 rounded-xl object-cover shrink-0"
+                        aspectRatio="aspect-square"
+                        className="w-11 h-11 rounded-xl shrink-0"
                       />
                       <div className="min-w-0">
                         <p className="text-xs font-bold text-espressoDeep truncate">{lot.name}</p>

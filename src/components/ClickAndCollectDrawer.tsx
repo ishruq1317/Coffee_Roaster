@@ -19,6 +19,7 @@ import {
   PackageCheck,
 } from 'lucide-react';
 import { FulfillmentType, PickupOrderDetails } from '../types/coffee';
+import { ResponsiveImage } from './ResponsiveImage';
 
 export const ClickAndCollectDrawer: React.FC = () => {
   const {
@@ -77,10 +78,17 @@ export const ClickAndCollectDrawer: React.FC = () => {
     '17:30 – 18:00',
   ];
 
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    if (drawerStep === 3) {
+      setDrawerStep(1);
+    }
+  };
+
   // Close on Escape key & manage body scroll
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsDrawerOpen(false);
+      if (e.key === 'Escape') handleCloseDrawer();
     };
     if (isDrawerOpen) {
       window.addEventListener('keydown', handleKeyDown);
@@ -92,7 +100,7 @@ export const ClickAndCollectDrawer: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'auto';
     };
-  }, [isDrawerOpen, setIsDrawerOpen]);
+  }, [isDrawerOpen, drawerStep, setIsDrawerOpen, setDrawerStep]);
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -196,83 +204,85 @@ export const ClickAndCollectDrawer: React.FC = () => {
             {/* ================= STEP 1: CART REVIEW ================= */}
             {drawerStep === 1 && (
               <>
-                {/* Fulfillment Method Selector: Pickup vs. Delivery */}
-                <div className="grid grid-cols-2 gap-2 p-1 bg-oatSurface rounded-2xl border border-espressoDeep/10">
-                  <button
-                    onClick={() => setFulfillmentType('pickup')}
-                    className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${
-                      fulfillmentType === 'pickup'
-                        ? 'bg-espressoDeep text-stoneIvory shadow-xs font-bold'
-                        : 'text-textLightMuted hover:text-espressoDeep'
-                    }`}
-                  >
-                    <Coffee className="w-3.5 h-3.5 text-terracotta shrink-0" />
-                    <span className="truncate">{t.drawer.fulfillmentTogglePickup}</span>
-                  </button>
-
-                  <button
-                    onClick={() => setFulfillmentType('delivery')}
-                    className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${
-                      fulfillmentType === 'delivery'
-                        ? 'bg-espressoDeep text-stoneIvory shadow-xs font-bold'
-                        : 'text-textLightMuted hover:text-espressoDeep'
-                    }`}
-                  >
-                    <Truck className="w-3.5 h-3.5 text-terracotta shrink-0" />
-                    <span className="truncate">{t.drawer.fulfillmentToggleDelivery}</span>
-                  </button>
-                </div>
-
-                {/* Free Shipping Progress Indicator (if delivery is chosen) */}
-                {fulfillmentType === 'delivery' && (
-                  <div className="bg-oatSurface/60 p-3.5 rounded-2xl border border-espressoDeep/10 space-y-1.5">
-                    <div className="flex justify-between text-xs font-semibold text-espressoDeep">
-                      <span>
-                        {isFreeShipping
-                          ? t.drawer.freeShippingUnlocked
-                          : t.drawer.freeShippingProgress(formatMoney(shippingRemainingEUR))}
-                      </span>
-                    </div>
-                    <div className="w-full h-2 rounded-full bg-stoneIvory overflow-hidden">
-                      <div
-                        className="h-full bg-terracotta transition-all duration-500"
-                        style={{
-                          width: `${Math.min(100, (cartTotalEUR / freeShippingThresholdEUR) * 100)}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Empty State */}
                 {cart.length === 0 ? (
-                  <div className="py-16 text-center space-y-3">
+                  /* Empty State */
+                  <div className="py-16 text-center space-y-4">
                     <ShoppingBag className="w-12 h-12 mx-auto text-espressoDeep/30" />
                     <p className="font-serif text-lg font-bold text-espressoDeep">{t.drawer.emptyText}</p>
                     <button
                       onClick={() => setIsDrawerOpen(false)}
-                      className="px-5 py-2.5 rounded-full bg-terracotta text-white text-xs font-bold uppercase tracking-wider hover:bg-terracottaHover transition-all"
+                      className="px-6 py-3 rounded-full bg-terracotta text-white text-xs font-bold uppercase tracking-wider hover:bg-terracottaHover transition-all shadow-md active:scale-95"
                     >
                       {t.drawer.browseLots}
                     </button>
                   </div>
                 ) : (
-                  /* Item List */
-                  <div className="space-y-3.5">
-                    {cart.map((item) => (
-                      <div
-                        key={item.id}
-                        className="p-3.5 rounded-2xl bg-white border border-espressoDeep/10 flex items-center justify-between gap-3 shadow-xs"
+                  <>
+                    {/* Fulfillment Method Selector: Pickup vs. Delivery */}
+                    <div className="grid grid-cols-2 gap-2 p-1 bg-oatSurface rounded-2xl border border-espressoDeep/10">
+                      <button
+                        onClick={() => setFulfillmentType('pickup')}
+                        className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${
+                          fulfillmentType === 'pickup'
+                            ? 'bg-espressoDeep text-stoneIvory shadow-xs font-bold'
+                            : 'text-textLightMuted hover:text-espressoDeep'
+                        }`}
                       >
-                        <img
-                          src={item.image}
-                          alt={item.lotName}
-                          className="w-14 h-14 rounded-xl object-cover shrink-0"
-                        />
-                        <div className="flex-1 min-w-0 space-y-1">
-                          <p className="font-serif text-sm font-bold text-espressoDeep truncate">
-                            {item.lotName}
-                          </p>
+                        <Coffee className="w-3.5 h-3.5 text-terracotta shrink-0" />
+                        <span className="truncate">{t.drawer.fulfillmentTogglePickup}</span>
+                      </button>
+
+                      <button
+                        onClick={() => setFulfillmentType('delivery')}
+                        className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-center ${
+                          fulfillmentType === 'delivery'
+                            ? 'bg-espressoDeep text-stoneIvory shadow-xs font-bold'
+                            : 'text-textLightMuted hover:text-espressoDeep'
+                        }`}
+                      >
+                        <Truck className="w-3.5 h-3.5 text-terracotta shrink-0" />
+                        <span className="truncate">{t.drawer.fulfillmentToggleDelivery}</span>
+                      </button>
+                    </div>
+
+                    {/* Free Shipping Progress Indicator (if delivery is chosen) */}
+                    {fulfillmentType === 'delivery' && (
+                      <div className="bg-oatSurface/60 p-3.5 rounded-2xl border border-espressoDeep/10 space-y-1.5">
+                        <div className="flex justify-between text-xs font-semibold text-espressoDeep">
+                          <span>
+                            {isFreeShipping
+                              ? t.drawer.freeShippingUnlocked
+                              : t.drawer.freeShippingProgress(formatMoney(shippingRemainingEUR))}
+                          </span>
+                        </div>
+                        <div className="w-full h-2 rounded-full bg-stoneIvory overflow-hidden">
+                          <div
+                            className="h-full bg-terracotta transition-all duration-500"
+                            style={{
+                              width: `${Math.min(100, (cartTotalEUR / freeShippingThresholdEUR) * 100)}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Item List */}
+                    <div className="space-y-3.5">
+                      {cart.map((item) => (
+                        <div
+                          key={item.id}
+                          className="p-3.5 rounded-2xl bg-white border border-espressoDeep/10 flex items-center justify-between gap-3 shadow-xs"
+                        >
+                          <ResponsiveImage
+                            src={item.image}
+                            alt={item.lotName}
+                            aspectRatio="aspect-square"
+                            className="w-14 h-14 rounded-xl shrink-0"
+                          />
+                          <div className="flex-1 min-w-0 space-y-1">
+                            <p className="font-serif text-sm font-bold text-espressoDeep truncate">
+                              {item.lotName}
+                            </p>
                           <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-textLightMuted">
                             <span className="px-2 py-0.5 rounded-md bg-oatSurface font-semibold text-espressoDeep">
                               {item.weight}
@@ -320,7 +330,8 @@ export const ClickAndCollectDrawer: React.FC = () => {
                       </div>
                     ))}
                   </div>
-                )}
+                </>
+              )}
               </>
             )}
 

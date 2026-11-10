@@ -112,7 +112,7 @@ export const SavingsCalculator: React.FC<SavingsCalculatorProps> = ({ onQuickOrd
 
         <div className="pt-2 text-[11px] text-stoneIvory/60 flex items-center gap-1.5">
           <PiggyBank className="w-3.5 h-3.5 text-terracotta" />
-          <span>{t.store.atelierCupCost}</span>
+          <span>{t.store.atelierCupCost} {formatMoney(atelierCupCostEUR)}</span>
         </div>
       </div>
 

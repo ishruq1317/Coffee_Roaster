@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRoastery } from '../context/RoasteryContext';
 import {
   MessageCircle,
@@ -26,10 +26,30 @@ export const EuropeanCompliance: React.FC = () => {
   const [analyticsOptIn, setAnalyticsOptIn] = useState(false);
   const [marketingOptIn, setMarketingOptIn] = useState(false);
 
+  // Accessible modal keyboard handling & scroll lock
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveLegalModal(null);
+      }
+    };
+    if (activeLegalModal) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'auto';
+    };
+  }, [activeLegalModal, setActiveLegalModal]);
+
   const googleMapsUrl =
     'https://www.google.com/maps/search/?api=1&query=Geyerstra%C3%9Fe+14+80469+M%C3%BCnchen';
-  const whatsappUrl =
-    'https://wa.me/49894528901?text=Hello%20ATELIER%20Roastery%2C%20I%20have%20a%20question%20about%20your%20beans%20and%20roasting%20schedule!';
+  const whatsappUrl = `https://wa.me/49894528901?text=${encodeURIComponent(
+    t.compliance.whatsAppGreeting
+  )}`;
 
   return (
     <>

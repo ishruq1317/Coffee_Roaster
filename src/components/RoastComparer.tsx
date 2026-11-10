@@ -2,9 +2,10 @@ import React, { useState, useRef, useCallback } from 'react';
 import { useRoastery } from '../context/RoasteryContext';
 import { ROAST_PROFILES, SINGLE_ORIGIN_LOTS } from '../data/roasteryData';
 import { Sliders, Flame, ArrowLeftRight, Check, Droplet, Coffee } from 'lucide-react';
+import { ResponsiveImage } from './ResponsiveImage';
 
 export const RoastComparer: React.FC = () => {
-  const { t, addToCart, setIsDrawerOpen } = useRoastery();
+  const { t, addToCart, openDrawer } = useRoastery();
   const [sliderPosition, setSliderPosition] = useState(50); // percentage 0 to 100
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -38,10 +39,10 @@ export const RoastComparer: React.FC = () => {
   };
 
   const handleAddSampleBox = () => {
-    // Add both the Light Nordic (Colombia) and Full City Espresso (Guatemala) to cart
+    // Add both the Light Nordic Filter (Colombia) and Full City Espresso (Brazil) to cart
     addToCart(SINGLE_ORIGIN_LOTS[0], '250g', 'whole', false, 1);
-    addToCart(SINGLE_ORIGIN_LOTS[5], '250g', 'espresso', false, 1);
-    setIsDrawerOpen(true);
+    addToCart(SINGLE_ORIGIN_LOTS[4], '250g', 'espresso', false, 1);
+    openDrawer(1);
   };
 
   return (
@@ -58,7 +59,7 @@ export const RoastComparer: React.FC = () => {
           <p className="text-xs uppercase tracking-widest font-bold text-butterAccent mb-2">
             {t.comparer.kicker}
           </p>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+          <h2 className="font-serif fluid-heading-section font-bold text-white tracking-tight">
             {t.comparer.title}
           </h2>
           <p className="mt-4 text-base text-stoneIvory/80 leading-relaxed">
@@ -77,13 +78,15 @@ export const RoastComparer: React.FC = () => {
         >
           {/* Layer 1: Dark Full City Espresso Roast (Full Canvas) */}
           <div className="absolute inset-0 w-full h-full bg-[#180e0a]">
-            <img
-              src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1400&q=80"
+            <ResponsiveImage
+              src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd"
               alt="Full City Dark Roasted Espresso Beans"
-              className="w-full h-full object-cover filter brightness-[0.75] contrast-125 saturate-75 pointer-events-none"
+              aspectRatio="h-full w-full"
+              className="w-full h-full pointer-events-none"
+              imgClassName="filter brightness-[0.75] contrast-125 saturate-75"
             />
             {/* Dark Side Label Pill (Pinned to Right) */}
-            <div className="absolute top-6 right-6 glass-panel-dark px-4 py-2 rounded-2xl border border-white/10 text-right">
+            <div className="absolute top-6 right-6 glass-panel-dark px-4 py-2 rounded-2xl border border-white/10 text-right z-10">
               <span className="text-[10px] uppercase font-bold tracking-widest text-butterAccent block">
                 Profile B
               </span>
@@ -102,13 +105,15 @@ export const RoastComparer: React.FC = () => {
               WebkitClipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)`,
             }}
           >
-            <img
-              src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1400&q=80"
+            <ResponsiveImage
+              src="https://images.unsplash.com/photo-1447933601403-0c6688de566e"
               alt="Light Nordic Filter Roasted Coffee Beans"
-              className="w-full h-full object-cover filter brightness-110 contrast-105 saturate-125 pointer-events-none"
+              aspectRatio="h-full w-full"
+              className="w-full h-full pointer-events-none"
+              imgClassName="filter brightness-110 contrast-105 saturate-125"
             />
             {/* Light Side Label Pill (Pinned to Left) */}
-            <div className="absolute top-6 left-6 glass-panel-dark px-4 py-2 rounded-2xl border border-white/10 text-left">
+            <div className="absolute top-6 left-6 glass-panel-dark px-4 py-2 rounded-2xl border border-white/10 text-left z-10">
               <span className="text-[10px] uppercase font-bold tracking-widest text-terracotta block">
                 Profile A
               </span>

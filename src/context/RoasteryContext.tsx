@@ -34,6 +34,7 @@ interface RoasteryContextType {
   setIsDrawerOpen: (open: boolean) => void;
   drawerStep: 1 | 2 | 3;
   setDrawerStep: (step: 1 | 2 | 3) => void;
+  openDrawer: (step?: 1 | 2 | 3) => void;
   activeLegalModal: LegalModalType;
   setActiveLegalModal: (modal: LegalModalType) => void;
   cookieConsent: CookieConsentState;
@@ -51,20 +52,38 @@ const RoasteryContext = createContext<RoasteryContextType | undefined>(undefined
 const COOKIE_STORAGE_KEY = 'atelier_cookie_consent_v1';
 const CART_STORAGE_KEY = 'atelier_cart_v1';
 
+// Defensive localStorage wrapper for iOS Safari Private Browsing & sandboxes
+const safeStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      // ignore in restricted environments
+    }
+  },
+};
+
 export const RoasteryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('atelier_lang');
+    const saved = safeStorage.getItem('atelier_lang');
     return saved === 'DE' || saved === 'FR' || saved === 'EN' ? saved : 'EN';
   });
 
   const [currency, setCurrencyState] = useState<Currency>(() => {
-    const saved = localStorage.getItem('atelier_currency');
+    const saved = safeStorage.getItem('atelier_currency');
     return saved === 'GBP' || saved === 'CHF' || saved === 'EUR' ? saved : 'EUR';
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
+      const saved = safeStorage.getItem(CART_STORAGE_KEY);
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -79,7 +98,7 @@ export const RoasteryProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const [cookieConsent, setCookieConsent] = useState<CookieConsentState>(() => {
     try {
-      const saved = localStorage.getItem(COOKIE_STORAGE_KEY);
+      const saved = safeStorage.getItem(COOKIE_STORAGE_KEY);
       return saved
         ? JSON.parse(saved)
         : { consented: false, necessary: true, analytics: false, marketing: false };
@@ -89,21 +108,22 @@ export const RoasteryProvider: React.FC<{ children: ReactNode }> = ({ children }
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-    } catch {
-      // ignore
-    }
+    safeStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('atelier_lang', lang);
+    safeStorage.setItem('atelier_lang', lang);
   };
 
   const setCurrency = (curr: Currency) => {
     setCurrencyState(curr);
-    localStorage.setItem('atelier_currency', curr);
+    safeStorage.setItem('atelier_currency', curr);
+  };
+
+  const openDrawer = (step: 1 | 2 | 3 = 1) => {
+    setDrawerStep(step);
+    setIsDrawerOpen(true);
   };
 
   const saveCookieConsent = (consent: Partial<CookieConsentState>) => {
@@ -114,7 +134,7 @@ export const RoasteryProvider: React.FC<{ children: ReactNode }> = ({ children }
       necessary: true,
     };
     setCookieConsent(updated);
-    localStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify(updated));
+    safeStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify(updated));
   };
 
   const calculateItemPrice = (
@@ -224,6 +244,7 @@ export const RoasteryProvider: React.FC<{ children: ReactNode }> = ({ children }
         setIsDrawerOpen,
         drawerStep,
         setDrawerStep,
+        openDrawer,
         activeLegalModal,
         setActiveLegalModal,
         cookieConsent,

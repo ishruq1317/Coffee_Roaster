@@ -10,7 +10,7 @@ export const Navbar: React.FC = () => {
     currency,
     setCurrency,
     cartItemCount,
-    setIsDrawerOpen,
+    openDrawer,
     t,
   } = useRoastery();
 
@@ -126,7 +126,7 @@ export const Navbar: React.FC = () => {
 
             {/* Cart Trigger Button */}
             <button
-              onClick={() => setIsDrawerOpen(true)}
+              onClick={() => openDrawer(1)}
               aria-label="Open Cart and Click-and-Collect Drawer"
               className="relative flex items-center justify-center p-2.5 bg-espressoDeep text-stoneIvory rounded-full hover:bg-terracotta hover:scale-105 active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-terracotta"
             >

@@ -75,6 +75,8 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({ lot, index }) => {
       style={{
         transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
         transition: 'transform 0.15s ease-out',
+        willChange: 'transform',
+        transformStyle: 'preserve-3d',
       }}
       className={`group bg-stoneIvory rounded-3xl overflow-hidden border border-espressoDeep/10 shadow-tactile hover:shadow-2xl flex flex-col justify-between ${
         index % 3 === 1 ? 'lg:translate-y-6' : ''
@@ -172,13 +174,19 @@ export const ProducerCard: React.FC<ProducerCardProps> = ({ lot, index }) => {
                     <button
                       key={w}
                       onClick={() => setSelectedWeight(w)}
-                      className={`py-1.5 text-xs font-semibold rounded-xl border transition-all ${
+                      className={`py-1.5 text-xs font-semibold rounded-xl border transition-all relative ${
                         selectedWeight === w
                           ? 'bg-espressoDeep text-stoneIvory border-espressoDeep shadow-xs'
                           : 'bg-stoneIvory text-espressoDeep border-espressoDeep/10 hover:border-terracotta'
                       }`}
                     >
-                      {w}
+                      <span>{w}</span>
+                      {w === '500g' && (
+                        <span className="text-[8px] block text-butterAccent leading-none">-8%</span>
+                      )}
+                      {w === '1kg' && (
+                        <span className="text-[8px] block text-butterAccent leading-none">-15%</span>
+                      )}
                     </button>
                   ))}
                 </div>

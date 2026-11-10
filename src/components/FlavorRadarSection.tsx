@@ -50,7 +50,7 @@ export const FlavorRadarSection: React.FC = () => {
 
   const cx = 200;
   const cy = 200;
-  const radius = 120;
+  const radius = 112;
 
   const polarToCartesian = (centerX: number, centerY: number, r: number, angleInDegrees: number) => {
     const angleInRadians = (angleInDegrees * Math.PI) / 180.0;
@@ -95,7 +95,7 @@ export const FlavorRadarSection: React.FC = () => {
           <p className="text-xs uppercase tracking-widest font-bold text-terracotta mb-2">
             {t.radarSection.kicker}
           </p>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-espressoDeep tracking-tight">
+          <h2 className="font-serif fluid-heading-section font-bold text-espressoDeep tracking-tight">
             {t.radarSection.title}
           </h2>
           <p className="mt-4 text-base text-textLightMuted leading-relaxed">
@@ -271,7 +271,10 @@ export const FlavorRadarSection: React.FC = () => {
                   const score = currentScores[axis.key];
                   const r = (score / 100) * radius;
                   const pt = polarToCartesian(cx, cy, r, axis.angle);
-                  const labelPt = polarToCartesian(cx, cy, radius + 24, axis.angle);
+                  const labelPt = polarToCartesian(cx, cy, radius + 28, axis.angle);
+                  // Position score value slightly inward from the vertex so it never overlaps the outer axis label
+                  const scoreR = Math.max(22, r - 16);
+                  const scorePt = polarToCartesian(cx, cy, scoreR, axis.angle);
 
                   return (
                     <g
@@ -305,13 +308,14 @@ export const FlavorRadarSection: React.FC = () => {
                         {axis.label}
                       </text>
                       
-                      {/* Small Score pill */}
+                      {/* Inward Score Badge */}
                       <text
-                        x={pt.x}
-                        y={axis.angle === 180 ? pt.y + 16 : pt.y - 10}
+                        x={scorePt.x}
+                        y={scorePt.y}
                         textAnchor="middle"
+                        dominantBaseline="central"
                         className={`text-[10px] select-none ${
-                          hoveredAxis === axis.key ? 'font-extrabold fill-espressoDeep' : 'font-bold fill-terracotta'
+                          hoveredAxis === axis.key ? 'font-extrabold fill-terracotta' : 'font-bold fill-espressoDeep'
                         }`}
                       >
                         {score}

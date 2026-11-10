@@ -17,7 +17,7 @@ export const RoasteryVisitMapSection: React.FC = () => {
           <p className="text-xs uppercase tracking-widest font-bold text-terracotta mb-2">
             {t.visit.kicker}
           </p>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-espressoDeep tracking-tight">
+          <h2 className="font-serif fluid-heading-section font-bold text-espressoDeep tracking-tight">
             {t.visit.title}
           </h2>
           <p className="mt-4 text-base text-textLightMuted leading-relaxed">

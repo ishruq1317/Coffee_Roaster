@@ -5,11 +5,11 @@ import { ResponsiveImage } from './ResponsiveImage';
 import { SINGLE_ORIGIN_LOTS } from '../data/roasteryData';
 
 export const HeroSection: React.FC = () => {
-  const { t, language, setIsDrawerOpen, formatMoney, addToCart } = useRoastery();
+  const { t, language, openDrawer, formatMoney, addToCart } = useRoastery();
   const featuredLot = SINGLE_ORIGIN_LOTS[0]; // Colombia El Paraíso
 
   return (
-    <section className="relative min-h-[92dvh] lg:min-h-[100dvh] pt-24 sm:pt-28 pb-16 flex items-center bg-stoneIvory overflow-hidden">
+    <section className="relative min-h-[100dvh] pt-24 sm:pt-28 pb-16 flex items-center bg-stoneIvory overflow-hidden">
       {/* Subtle organic decorative background mesh */}
       <div className="absolute top-0 right-0 w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-gradient-to-bl from-oatSurface/70 via-butterAccent/15 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute bottom-10 left-[-10vw] w-[45vw] h-[45vw] max-w-[500px] max-h-[500px] bg-terracotta/5 rounded-full blur-3xl pointer-events-none -z-10" />
@@ -26,8 +26,8 @@ export const HeroSection: React.FC = () => {
               <span>{t.hero.tagline}</span>
             </div>
 
-            {/* Editorial Serif Headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-espressoDeep leading-[1.08]">
+            {/* Editorial Serif Headline with Fluid Clamp */}
+            <h1 className="font-serif fluid-heading-hero font-bold tracking-tight text-espressoDeep">
               {t.hero.headlinePart1}{' '}
               <span className="italic font-normal text-terracotta underline decoration-butterAccent/60 decoration-wavy decoration-2">
                 {t.hero.headlinePart2}
@@ -54,7 +54,7 @@ export const HeroSection: React.FC = () => {
               </a>
 
               <button
-                onClick={() => setIsDrawerOpen(true)}
+                onClick={() => openDrawer(1)}
                 className="inline-flex items-center justify-center px-6 py-4 text-sm font-semibold text-espressoDeep bg-oatSurface hover:bg-[#dfd7c7] border border-espressoDeep/15 rounded-full shadow-tactile active:shadow-tactile-pressed transition-all duration-200"
               >
                 <Coffee className="w-4 h-4 mr-2 text-terracotta" />
