@@ -28,6 +28,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { label: t.nav.flavorRadar, href: '#flavor-radar' },
     { label: t.nav.microLots, href: '#micro-lots' },
+    { label: t.nav.about, href: '#about-story' },
     { label: t.nav.roastComparer, href: '#roast-science' },
     { label: t.nav.beanStore, href: '#order-beans' },
     { label: t.nav.visit, href: '#roastery-visit' },

@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { FlavorRadarSection } from './components/FlavorRadarSection';
 import { ProducerSpotlights } from './components/ProducerSpotlights';
+import { AboutSection } from './components/AboutSection';
 import { RoastComparer } from './components/RoastComparer';
 import { BeanMiniStoreAndCalculator } from './components/BeanMiniStoreAndCalculator';
 import { RoasteryVisitMapSection } from './components/RoasteryVisitMapSection';
@@ -29,13 +30,16 @@ export const App: React.FC = () => {
           {/* 3. 3D Tilt Single-Origin Producer Spotlights */}
           <ProducerSpotlights />
 
-          {/* 4. Drag-to-Slide Roast Comparer */}
+          {/* 4. Our Story & Roasting Philosophy */}
+          <AboutSection />
+
+          {/* 5. Drag-to-Slide Roast Comparer */}
           <RoastComparer />
 
-          {/* 5. Online Store Configurator & Cost-Per-Cup Savings Estimator */}
+          {/* 6. Online Store Configurator & Cost-Per-Cup Savings Estimator */}
           <BeanMiniStoreAndCalculator />
 
-          {/* 6. Roastery Visit, Live Batch Indicator & Google Maps Directions */}
+          {/* 7. Roastery Visit, Live Batch Indicator & Google Maps Directions */}
           <RoasteryVisitMapSection />
         </main>
 

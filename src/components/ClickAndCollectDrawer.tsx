@@ -160,7 +160,7 @@ export const ClickAndCollectDrawer: React.FC = () => {
       
       {/* Backdrop overlay */}
       <div
-        onClick={() => setIsDrawerOpen(false)}
+        onClick={handleCloseDrawer}
         className="absolute inset-0 bg-espressoDeep/60 backdrop-blur-sm transition-opacity duration-300"
       />
 
@@ -190,7 +190,7 @@ export const ClickAndCollectDrawer: React.FC = () => {
             </div>
 
             <button
-              onClick={() => setIsDrawerOpen(false)}
+              onClick={handleCloseDrawer}
               className="p-2 rounded-full hover:bg-espressoDeep/10 text-espressoDeep transition-colors"
               aria-label="Close Drawer"
             >
@@ -329,6 +329,16 @@ export const ClickAndCollectDrawer: React.FC = () => {
                         </button>
                       </div>
                     ))}
+                  </div>
+
+                  <div className="pt-2 text-center">
+                    <button
+                      type="button"
+                      onClick={handleCloseDrawer}
+                      className="text-xs text-textLightMuted hover:text-terracotta underline font-medium transition-colors"
+                    >
+                      ← {t.drawer.backToStore}
+                    </button>
                   </div>
                 </>
               )}
