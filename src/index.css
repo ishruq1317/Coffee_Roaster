@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-stone-ivory: #F6F3EC;
+  --bg-oat-surface: #EAE4D7;
+  --surface-espresso-deep: #1E1410;
+  --surface-espresso-warm: #2C1D18;
+  --accent-terracotta: #C85A32;
+  --accent-butter: #F3D37A;
+  --accent-bordeaux: #5E1926;
+  --text-primary: #1E1410;
+  --text-muted: #6E5D53;
+}
+
+@layer base {
+  html {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #F6F3EC;
+    color: #1E1410;
+    scroll-behavior: smooth;
+  }
+
+  /* Safe area for modern mobile browsers with bottom navigation / notch */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+
+  /* Custom subtle scrollbars */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #EAE4D7;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #C85A32;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #963b19;
+  }
+}
+
+@layer utilities {
+  .glass-panel-light {
+    background: rgba(246, 243, 236, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+  }
+
+  .glass-panel-dark {
+    background: rgba(30, 20, 16, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .ease-out-expo {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Fluid Clamp Typography Scales (Strict Anti-Overflow for 360px–2560px) */
+  .fluid-heading-hero {
+    font-size: clamp(2rem, 5.2vw + 0.75rem, 4.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .fluid-heading-section {
+    font-size: clamp(1.75rem, 3.2vw + 0.5rem, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .fluid-heading-card {
+    font-size: clamp(1.15rem, 1.8vw + 0.4rem, 1.5rem);
+    line-height: 1.25;
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
+
+/* Subtle Shimmer Animation for Responsive Image Skeleton */
+.shimmer-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(234, 228, 215, 0.4) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(234, 228, 215, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite linear;
+}
